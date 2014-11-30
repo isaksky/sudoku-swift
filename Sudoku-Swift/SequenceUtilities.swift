@@ -27,3 +27,19 @@ func firstValue<E, S: SequenceType where S.Generator.Element == Optional<E> >(se
     return nil
 }
 
+func product2<E, ProductResultType, S: SequenceType where E == S.Generator.Element>(seq1: S, seq2: S, prod: (E, E) -> ProductResultType) -> SequenceOf<ProductResultType> {
+    return SequenceOf<ProductResultType>(
+        { () -> GeneratorOf<ProductResultType> in
+            var g1 = seq1.generate()
+            var g2 = seq2.generate()
+            return GeneratorOf<ProductResultType> {
+                if let e1 = g1.next() {
+                    if let e2 = g2.next() {
+                        return prod(e1, e2)
+                    }
+                }
+                return nil
+            }
+        }
+    )
+}

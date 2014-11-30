@@ -62,18 +62,12 @@ func colValues(puzzle: Puzzle, idx: Int) -> [Int] {
     return ret
 }
 
-func subGridIdxs(idx: Int) -> [Int] {
+func subGridIdxs(idx: Int) -> SequenceOf<Int> {
     let col = idx % 9
     let row = idx / 9
     let scol = (col / 3) * 3
     let srow = (row / 3) * 3
-    var ret = [Int]()
-    for r in 0...2 {
-        for c in 0...2 { // TODO figure out how to map this
-            ret.append(scol + c + (srow + r) * 9)
-        }
-    }
-    return ret
+    return product2(0...2, 0...2) { r, c in scol + c + (srow + r) * 9 }
 }
 
 func subGridValues(puzzle: Puzzle, idx: Int) -> [Int] {
