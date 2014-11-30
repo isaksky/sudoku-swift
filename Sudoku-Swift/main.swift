@@ -124,6 +124,7 @@ for (i, p) in enumerate(puzzles) {
         printPuzzle(solvedP)
     } else {
         println("Could not solve puzzle")
+        exit(1)
     }
 }
 
