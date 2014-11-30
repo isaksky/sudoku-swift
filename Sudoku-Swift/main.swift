@@ -114,7 +114,7 @@ func solve(puzzle: Puzzle) -> Puzzle? {
             p[best.idx] = v
             return p
         }
-        return firstMatch(pPuzzles, isSolved) ?? firstValue(lazy(pPuzzles).map(solve))
+        return firstMatch(pPuzzles, isSolved) ?? firstValue(pPuzzles.map(solve))
     }
 }
 
