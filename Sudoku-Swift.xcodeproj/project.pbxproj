@@ -211,6 +211,7 @@
 		4FA5C47B1A22D13D0008CD8D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_OPTIMIZATION_LEVEL = 3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
