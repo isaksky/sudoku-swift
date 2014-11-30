@@ -104,6 +104,7 @@ func solve(puzzle: Puzzle) -> Puzzle? {
             return e.possible.count < memo.possible.count ? e : memo
         }
     }
+    assert(best.idx != -1, "Bogus puzzle input")
     
     if best.possible.isEmpty {
         return nil
