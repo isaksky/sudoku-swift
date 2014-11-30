@@ -43,3 +43,16 @@ func product2<E, ProductResultType, S: SequenceType where E == S.Generator.Eleme
         }
     )
 }
+
+func reduce2<E, R, S: SequenceType where E == S.Generator.Element>(seq: S, seed: R, combine:(R, E, inout Bool) -> R) -> R {
+    // (sequence: S, initial: U, combine: (U, S.Generator.Element) -> U) -> U
+    var ret = seed
+    var g = seq.generate()
+    while let e = g.next() {
+        var shortCurcuit = false
+        ret = combine(ret, e, &shortCurcuit)
+        if shortCurcuit { return ret }
+    }
+    return ret
+}
+

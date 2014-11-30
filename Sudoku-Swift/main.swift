@@ -35,7 +35,6 @@ if let s = NSString(contentsOfFile: "sudoku.txt", encoding: NSUTF8StringEncoding
 
 println("There are \(puzzles.count) puzzles")
 
-
 func printPuzzle(puzzle: Puzzle) -> Void {
     for i in 0..<puzzle.count {
         let d = puzzle[i]
@@ -89,44 +88,30 @@ func possByIdx(puzzle: Puzzle, idx: Int) -> [Int] {
     }
 }
 
-func fillObvious(puzzle: Puzzle) -> Puzzle {
-    var retP : Puzzle = Array(puzzle)
-    var changed : Bool
-    
-    do {
-        changed = false
-        for idx in 0...80 {
-            let v = retP[idx]
-            if v == 0 {
-                let poss = possByIdx(retP, idx)
-                if poss.count == 1 {
-                    retP[idx] = poss[0]
-                    changed = true
-//                    break
-                }
-            }
-        }
-    } while (changed)
-    
-    return retP
-}
-
 func isSolved(puzzle: Puzzle) -> Bool {
     return !contains(puzzle, 0)
 }
 
 func solve(puzzle: Puzzle) -> Puzzle? {
-    let unfilledIdxs = filter(0...80) { idx in puzzle[idx] == 0 }
-    let allPoss = map(unfilledIdxs) { idx in (poss: possByIdx(puzzle, idx), idx: idx) }
-    let best = lazy(allPoss).reduce(allPoss[0]) { (best, e) in best.poss.count < e.poss.count ? best : e }
+    let unfilledIdxs = lazy(0...80).filter { idx in puzzle[idx] == 0 }
+    let allPoss = unfilledIdxs.map { idx in (possible: possByIdx(puzzle, idx), idx: idx) }
+
+    let best = reduce2(allPoss, (possible: [1,2,3,4,5,6,7,8,9], idx: -1)) { memo, e, done in
+        if e.possible.count <= 1 {
+            done = true
+            return e
+        } else {
+            return e.possible.count < memo.possible.count ? e : memo
+        }
+    }
     
-    if best.poss.isEmpty {
+    if best.possible.isEmpty {
         return nil
     } else {
-        let pPuzzles = lazy(best.poss).map { v -> Puzzle in
+        let pPuzzles = lazy(best.possible).map { v -> Puzzle in
             var p = Array(puzzle)
             p[best.idx] = v
-            return fillObvious(p)
+            return p
         }
         return firstMatch(pPuzzles, isSolved) ?? firstValue(lazy(pPuzzles).map(solve))
     }
