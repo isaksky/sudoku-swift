@@ -13,7 +13,7 @@ var puzzles : [Puzzle] = []
 var tmpPuzzle : Puzzle = []
 var readError : NSError?
 
-if let s = NSString(contentsOfFile: "/Users/Isak/dev/sudoku-haskell/sudoku.txt", encoding: NSUTF8StringEncoding, error: &readError) as? String {
+if let s = NSString(contentsOfFile: "sudoku.txt", encoding: NSUTF8StringEncoding, error: &readError) as? String {
     s.enumerateLines({ (line, stop) -> () in
         if line.hasPrefix("Grid") {
             if tmpPuzzle.count > 0 {
@@ -34,6 +34,7 @@ if let s = NSString(contentsOfFile: "/Users/Isak/dev/sudoku-haskell/sudoku.txt",
 }
 
 println("There are \(puzzles.count) puzzles")
+
 
 func printPuzzle(puzzle: Puzzle) -> Void {
     for i in 0..<puzzle.count {
@@ -75,18 +76,10 @@ func subGridIdxs(idx: Int) -> [Int] {
     return ret
 }
 
-func subGridValues(puzzle:Puzzle, idx: Int) -> [Int] {
+func subGridValues(puzzle: Puzzle, idx: Int) -> [Int] {
     let idxs = subGridIdxs(idx)
     let vs = map(idxs) { idx in puzzle[idx] }
     return filter(vs) { v in v != 0 }
-}
-
-func concat<T>(arys: [T]...) -> [T] {
-    var ret = [T]()
-    for ary in arys {
-        ret += ary
-    }
-    return ret
 }
 
 func possByIdx(puzzle: Puzzle, idx: Int) -> [Int] {
@@ -95,7 +88,7 @@ func possByIdx(puzzle: Puzzle, idx: Int) -> [Int] {
         let colVs = colValues(puzzle, idx)
         let rowVs = rowValues(puzzle, idx)
         let subGridVs = subGridValues(puzzle, idx)
-        let taken = concat(colVs, rowVs, subGridVs)
+        let taken = colVs + rowVs + subGridVs
         return filter(1...9) {v in !contains(taken, v) }
     } else {
         return [v]
@@ -103,7 +96,7 @@ func possByIdx(puzzle: Puzzle, idx: Int) -> [Int] {
 }
 
 func fillObvious(puzzle: Puzzle) -> Puzzle {
-    var retP = Array(puzzle)
+    var retP : Puzzle = Array(puzzle)
     var changed : Bool
     
     do {
@@ -115,7 +108,7 @@ func fillObvious(puzzle: Puzzle) -> Puzzle {
                 if poss.count == 1 {
                     retP[idx] = poss[0]
                     changed = true
-                    break
+//                    break
                 }
             }
         }
@@ -128,84 +121,29 @@ func isSolved(puzzle: Puzzle) -> Bool {
     return !contains(puzzle, 0)
 }
 
-//recSolve :: [Int] -> Maybe [Int]
-//recSolve puzzle =
-//let unfilledIdxs = filter (\ i -> puzzle !! i == 0) [0..80]
-//allPoss = map (\ i -> (possByIdx puzzle i, i)) unfilledIdxs
-//    -- Find the idx with the smallest number of possibilities
-//(poss, idx) = minimumBy (\ (ps1, _) (ps2, _)  -> compare (length ps1) (length ps2)) allPoss
-//in case poss of [] -> Nothing   -- There is a square with 0 possibilities. Cannot solve.
-//_  -> let p_puzzles = map (\ p -> [if i == idx then p else puzzle !! i | i <- [0..80]]) poss
-//p_puzzles_f = map fillObvious p_puzzles
-//in (find isSolved p_puzzles_f) `orElse` firstM (map recSolve p_puzzles_f)
-
-//func bestBy<T>(ary: [T], getBest: (T , T) -> T) -> T? {
-//    var best : T? = nil
-//    for t in ary {
-//        if let tmp = best {
-//            best = getBest(t, tmp)
-//        } else {
-//            best = t
-//        }
-//    }
-//    return best
-//}
-
-func firstMatch<T>(ary: [T], isMatch: T -> Bool) -> T? {
-    for e in ary {
-        if isMatch(e) {
-            return e
-        }
-    }
-    return nil
-}
-
-func hasValue<T>(a: T?) -> Bool {
-    if let b = a {
-        return true
-    }
-    return false
-}
-
-func firstValue<T>(ary: [T?]) -> T? {
-    for e in ary {
-        if e != nil {
-            return e
-        }
-    }
-    return nil
-}
-
-func recSolve(puzzle: Puzzle) -> Puzzle? {
+func solve(puzzle: Puzzle) -> Puzzle? {
     let unfilledIdxs = filter(0...80) { idx in puzzle[idx] == 0 }
     let allPoss = map(unfilledIdxs) { idx in (poss: possByIdx(puzzle, idx), idx: idx) }
-    let best = reduce(allPoss, allPoss[0]) { (best, e) in best.poss.count < e.poss.count ? best : e }
+    let best = lazy(allPoss).reduce(allPoss[0]) { (best, e) in best.poss.count < e.poss.count ? best : e }
     
     if best.poss.isEmpty {
         return nil
     } else {
-        let pPuzzles = map(best.poss) { v -> Puzzle in
+        let pPuzzles = lazy(best.poss).map { v -> Puzzle in
             var p = Array(puzzle)
             p[best.idx] = v
             return fillObvious(p)
         }
-
-        return firstMatch(pPuzzles, isSolved) ?? firstValue(map(pPuzzles, recSolve))
+        return firstMatch(pPuzzles, isSolved) ?? firstValue(lazy(pPuzzles).map(solve))
     }
 }
 
-
 for (i, p) in enumerate(puzzles) {
     println("Puzzle \(i + 1):")
-    if let solvedP = recSolve(p) {
+    if let solvedP = solve(p) {
         printPuzzle(solvedP)
     } else {
         println("Could not solve puzzle")
     }
-
 }
-//let firstP = puzzles[0]
-//let tmp = fillObvious(firstP)
-//printPuzzle(tmp)
-////printPuzzle(puzzles[0]);
-////print(rowValues(puzzles[0], 0))
+

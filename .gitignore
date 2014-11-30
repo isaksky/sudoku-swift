@@ -10,14 +10,13 @@ build/*
 !default.perspectivev3
 *.xcworkspace
 !default.xcworkspace
-xcuserdata
 profile
 *.moved-aside
 DerivedData
-MyRecorder.xcodeproj/xcuserdata
-MyRecorder.xcodeproj/project.xcworkspace
+*.xcodeproj/xcuserdata
+*.xcodeproj/project.xcworkspace
 .DS_Store
-package/*
-.idea
+
+
 
 

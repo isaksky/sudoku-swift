@@ -8,23 +8,30 @@
 
 /* Begin PBXBuildFile section */
 		4FA5C4771A22D13D0008CD8D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA5C4761A22D13D0008CD8D /* main.swift */; };
+		4FC3592D1A2B870000526FDE /* LazySequenceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC3592C1A2B870000526FDE /* LazySequenceExtensions.swift */; };
+		4FC3592F1A2B872D00526FDE /* SequenceUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC3592E1A2B872D00526FDE /* SequenceUtilities.swift */; };
+		4FC359311A2B87DB00526FDE /* sudoku.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4FC359301A2B87B400526FDE /* sudoku.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		4FA5C4711A22D13D0008CD8D /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 16;
 			files = (
+				4FC359311A2B87DB00526FDE /* sudoku.txt in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4FA5C4731A22D13D0008CD8D /* Sudoku-Swift */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Sudoku-Swift"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FA5C4761A22D13D0008CD8D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		4FC3592C1A2B870000526FDE /* LazySequenceExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazySequenceExtensions.swift; sourceTree = "<group>"; };
+		4FC3592E1A2B872D00526FDE /* SequenceUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SequenceUtilities.swift; sourceTree = "<group>"; };
+		4FC359301A2B87B400526FDE /* sudoku.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sudoku.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +64,10 @@
 		4FA5C4751A22D13D0008CD8D /* Sudoku-Swift */ = {
 			isa = PBXGroup;
 			children = (
+				4FC359301A2B87B400526FDE /* sudoku.txt */,
 				4FA5C4761A22D13D0008CD8D /* main.swift */,
+				4FC3592C1A2B870000526FDE /* LazySequenceExtensions.swift */,
+				4FC3592E1A2B872D00526FDE /* SequenceUtilities.swift */,
 			);
 			path = "Sudoku-Swift";
 			sourceTree = "<group>";
@@ -118,7 +128,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FC3592D1A2B870000526FDE /* LazySequenceExtensions.swift in Sources */,
 				4FA5C4771A22D13D0008CD8D /* main.swift in Sources */,
+				4FC3592F1A2B872D00526FDE /* SequenceUtilities.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,6 +245,7 @@
 				4FA5C47C1A22D13D0008CD8D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
